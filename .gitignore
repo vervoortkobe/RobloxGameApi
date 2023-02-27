@@ -4,6 +4,3 @@
 .upm/
 node_modules/
 .env
-.replit
-.replit_zip_error_log.txt
-.replit.nix

@@ -36,13 +36,23 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/api/prices", (req, res) => {
-  console.log(typeof (req.query.key));
   if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
+
+    const row = db.prepare('SELECT * FROM test');
+    console.log(row);
+    
+    return res.json({});
+
+  } else return res.json({ error: "Your KEY was declined!" });
+});
+
+app.post("/api/prices", (req, res) => {
+  if (req.params && req.params.key && process.env.KEYS && process.env.KEYS.includes(req.params.key)) {
 
     // for the prices boundaries
     const tierlimits = require("./tierlimits.json");
 
-    
+
     console.log(tierlimits.F);
 
     /*{
@@ -56,12 +66,23 @@ app.get("/api/prices", (req, res) => {
 
 
     return res.json({ access: true });
+
   } else return res.json({ error: "Your KEY was declined!" });
 });
 
 app.post("/api/serialnumbers", (req, res) => {
   if (req.params && req.params.key && process.env.KEYS && process.env.KEYS.includes(req.params.key)) {
+
     return res.json({ access: true });
+
+  } else return res.json({ error: "Your KEY was declined!" });
+});
+
+app.get("/dash", (req, res) => {
+  if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
+
+    return res.sendFile(__dirname + "/index.html");
+
   } else return res.json({ error: "Your KEY was declined!" });
 });
 

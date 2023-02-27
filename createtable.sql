@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS test (
-  id INT NOT NULL PRIMARY KEY, -- self auto_increment
-  name VARCHAR,
+  id INT PRIMARY KEY, -- self auto_increment
+  name NOT NULL VARCHAR,
   surname VARCHAR,
   birthdate VARCHAR,
   email VARCHAR,

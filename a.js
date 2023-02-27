@@ -10,8 +10,8 @@ let db = new sqlite3("./test.sqlite3", sqlite3.OPEN_READWRITE, (err) => {
   verbose: console.log;
 });
 
-const migration = fs.readFileSync('insert.sql', 'utf8');
-db.exec(migration);
+//const migration = fs.readFileSync('insert.sql', 'utf8');
+//db.exec(migration);
 
-//const row = sdb.prepare('SELECT * FROM test');
-//console.log(row.username);
+const rows = sdb.prepare("SELECT * FROM test;").all();
+rows.forEach(r => console.log(r.username));

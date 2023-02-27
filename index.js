@@ -1,7 +1,7 @@
 const express = require("express");
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const fs = require("fs");
-const db = require("better-sqlite3")("./test.db", { verbose: console.log });
+const db = require("better-sqlite3")("./test.sqlite3", { verbose: console.log });
 
 const app = express();
 const PORT = 80; //process.env.PORT;
@@ -38,10 +38,9 @@ app.get("/api", (req, res) => {
 app.get("/api/prices", (req, res) => {
   if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
-    const row = db.prepare('SELECT * FROM test');
-    console.log(row);
-    
-    return res.json({});
+    const rows = db.prepare("SELECT * FROM test;").all();
+
+    return res.json(rows);
 
   } else return res.json({ error: "Your KEY was declined!" });
 });

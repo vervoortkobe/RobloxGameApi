@@ -1,5 +1,3 @@
-const express = require("express");
-const dotenv = require("dotenv").config();
 const fs = require("fs");
 const db = require("better-sqlite3")("./test.sqlite3", { verbose: console.log });
 

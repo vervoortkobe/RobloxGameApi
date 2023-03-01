@@ -105,7 +105,11 @@ app.get("/dash", (req, res) => {
     json += "[<br>";
     rows.forEach(r => {
       console.log(r);
-      json += `&nbsp;&nbsp;&nbsp;&nbsp;{ id: ${r.id}, name: ${r.name}, price: ${r.price}, tier: ${r.tier} }, <br>`;
+      json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
+        <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>, 
+        <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>, 
+        <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">\"${r.price}\"</b>, 
+        <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b> }, <br>`;
     });
     json += "]";
 

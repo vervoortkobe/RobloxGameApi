@@ -102,7 +102,7 @@ app.get("/dash", (req, res) => {
     const rows = db.prepare("SELECT * FROM items;").all();
     if(rows.length === 0) json = "No database table (items) records yet...";
 
-    json += "[<br>"
+    json += "[<br>";
     rows.forEach(r => {
       console.log(r);
       json += `&nbsp;&nbsp;&nbsp;&nbsp;{ id: ${r.id}, name: ${r.name}, price: ${r.price}, tier: ${r.tier} }, <br>`;

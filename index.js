@@ -98,7 +98,28 @@ app.post("/api/serialnumbers", (req, res) => {
 app.get("/dash", (req, res) => {
   if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
-    return res.sendFile(__dirname + "/index.html");
+    let json = "";
+    const rows = db.prepare("SELECT * FROM items;").all();
+    if(rows.length === 0) json = "No database table (items) records yet...";
+
+    json += "[<br>";
+    rows.forEach(r => {
+      console.log(r);
+      json += `&nbsp;&nbsp;&nbsp;&nbsp;{ id: ${r.id}, name: ${r.name}, price: ${r.price}, tier: ${r.tier} }, <br>`;
+    });
+    json += "]";
+
+    const index = fs.readFileSync("./index.html");
+      
+    return res.send(`
+      ${index}
+      ${json}
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `);
 
   } else return res.json({ error: "Your KEY was declined!" });
 });

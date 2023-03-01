@@ -1,8 +1,11 @@
 const fs = require("fs");
-const db = require("better-sqlite3")("./test.sqlite3", { verbose: console.log });
+const db = require("better-sqlite3")("./itemdb.sqlite3", { verbose: console.log });
 
-//const migration = fs.readFileSync("insert.sql", "utf8");
-//db.exec(migration);
+const createtable = fs.readFileSync("createtable.sql", "utf8");
+db.exec(createtable);
 
-const rows = db.prepare("SELECT * FROM test;").all();
+const insert = fs.readFileSync("insert.sql", "utf8");
+db.exec(insert);
+
+const rows = db.prepare("SELECT * FROM items;").all();
 rows.forEach(r => console.log(r));

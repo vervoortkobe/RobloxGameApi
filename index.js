@@ -1,10 +1,28 @@
 const express = require("express");
 require("dotenv").config();
 const fs = require("fs");
-const db = require("better-sqlite3")("./test.sqlite3", { verbose: console.log });
+const db = require("better-sqlite3")("./itemdb.sqlite3", { verbose: console.log });
 
 const app = express();
 const PORT = 80; //process.env.PORT;
+
+//BOOTSTRAP DIR HOST
+let bootstraps = fs.readdirSync("./bootstrap-5.1.3-dist/css/themes/", { withFileTypes: true });
+bootstraps.forEach(b => {
+  app.get(`/bootstrap-5.1.3-dist/css/themes/${encodeURI(`${b.name}`)}`, (req, res) => {
+    res.sendFile(`${__dirname}/bootstrap-5.1.3-dist/css/themes/${decodeURI(`${b.name}`)}`);
+  });
+});
+
+//BOOTSTRAP JS
+app.get("/bootstrap-5.1.3-dist/js/bootstrap.min.js", (req, res) => {
+  res.sendFile(`${__dirname}/bootstrap-5.1.3-dist/js/bootstrap.min.js`);
+});
+
+//BOOTSTRAP JS MAP
+app.get("/bootstrap-5.1.3-dist/js/bootstrap.min.js.map", (req, res) => {
+  res.sendFile(`${__dirname}/bootstrap-5.1.3-dist/js/bootstrap.min.js.map`);
+});
 
 app.get("/", (req, res) => {
   res.json({
@@ -38,7 +56,7 @@ app.get("/api", (req, res) => {
 app.get("/api/prices", (req, res) => {
   if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
-    const rows = db.prepare("SELECT * FROM test;").all();
+    const rows = db.prepare("SELECT * FROM items;").all();
 
     return res.json(rows);
 

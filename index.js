@@ -85,7 +85,7 @@ app.post("/api/prices", (req, res) => {
     return res.json({ access: true });
 
   } else return res.json({ error: "Your KEY was declined!" });
-})
+});
 
 app.post("/api/serialnumbers", (req, res) => {
   if (req.params && req.params.key && process.env.KEYS && process.env.KEYS.includes(req.params.key)) {

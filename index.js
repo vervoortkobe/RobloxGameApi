@@ -102,16 +102,16 @@ app.get("/dash", (req, res) => {
     const rows = db.prepare("SELECT * FROM items;").all();
     if(rows.length === 0) json = "No database table (items) records yet...";
 
-    json += "{<br>";
+    json += "[<br>";
     rows.forEach(r => {
-      console.log(r);
+      //console.log(r);
       json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
         <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>, 
         <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>, 
         <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">\"${r.price}\"</b>, 
         <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b> }, <br>`;
     });
-    json += "}";
+    json += "]";
 
     const index = fs.readFileSync("./dash.html");
       

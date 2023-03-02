@@ -15,20 +15,10 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
   <style>
-    h1 { text-align: center; font-family: roboto, sans-serif; font-size: 38px; padding: 20px 0 20px 0; }
-    /*h4 { max-width: 300px; height: 46px; user-select: none; text-align: center; padding: 5px 0 6px 0; border: 0px solid #000; border-radius: 20px; background-color: #fff; }
-    p[id="info"] { max-width: 300px; height: auto; user-select: none; text-align: center; padding: 3px 0 4px 0; border: 0px solid #000; border-radius: 20px; background-color: #fff; }
-    p[id="post"] { max-width: 300px; height: auto; user-select: none; text-align: center; padding: 4px 0 5px 0; border: 0px solid #000; border-radius: 20px; background-color: #fff; }
-    img { border-radius: 10px; max-width: 50%; height: auto; }*/
+    h1 { text-align: center; font-family: roboto, sans-serif; font-size: 38px; padding: 20px 0 20px 0; font-weight: bold; }
     .pagecontent { display: none; }
     .preload { padding-top: 19%; padding-bottom: 19%; }
     center { position: relative; }
-    /*.details { position: absolute; top: 2vh; right: 2vw; }
-    .details img { border-radius: 30px; width: 8vh; height: auto; }
-    .details b { font-size: 1.2rem;  }
-    .details li { display: inline-block; }
-    .details li:nth-child(1) { padding: 1vh; }
-    .commands a button { margin-bottom: 2vh; width: 10vw; }*/
           
     .post-form { width: 300px; margin: 0 auto; }
     .post-form h1 { padding: 20px 0 20px 0; }
@@ -76,6 +66,11 @@
     }
     .grid .json span {
       color: #9cdcf1;
+    }
+    .grid .json {
+      overflow-y: scroll;
+      scrollbar-color: #f3f4f5 #fcfdfd;
+      scrollbar-width: thin;
     }
   </style>
 </head>
@@ -169,7 +164,7 @@
       <div class="post-form">
         <form action="add" method="POST">
           <label for="name">Name</label>
-          <input type="text" name="name" placeholder="Name (20)" id="name" class="form-control" autofocus required minlength="1" maxlength="20"><br>
+          <input type="text" name="name" placeholder="Name (20)" id="name" class="form-control" required autofocus required minlength="1" maxlength="20"><br>
           <label for="price">Price</label>
           <input type="number" name="price" placeholder="Price" id="price" class="form-control" required min="0"><br>
           <label for="tier">Tier</label>
@@ -180,7 +175,7 @@
       <div class="post-form">
         <form action="remove" method="POST">
           <label for="name">Name</label>
-          <input type="text" name="name" placeholder="Name (20)" id="name" class="form-control" autofocus required minlength="1" maxlength="20"><br>
+          <input type="text" name="name" placeholder="Name (20)" id="name" class="form-control" required autofocus required minlength="1" maxlength="20"><br>
           <label for="price">Price</label>
           <input type="number" name="price" placeholder="Price" id="price" class="form-control" required min="0"><br>
           <label for="tier">Tier</label>

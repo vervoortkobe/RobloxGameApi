@@ -6,6 +6,15 @@ const db = require("better-sqlite3")("./itemdb.sqlite3", { verbose: console.log 
 const app = express();
 const PORT = 80; //process.env.PORT;
 
+/*app.use(session({
+	secret: process.env.EXPRESS_APP_SESSIONSECRET,
+	resave: true,
+	saveUninitialized: true
+}));*/
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 //BOOTSTRAP DIR HOST
 let bootstraps = fs.readdirSync("./bootstrap-5.1.3-dist/css/themes/", { withFileTypes: true });
 bootstraps.forEach(b => {
@@ -24,6 +33,7 @@ app.get("/bootstrap-5.1.3-dist/js/bootstrap.min.js.map", (req, res) => {
   res.sendFile(`${__dirname}/bootstrap-5.1.3-dist/js/bootstrap.min.js.map`);
 });
 
+// /
 app.get("/", (req, res) => {
   res.json({
     endpoints: [
@@ -49,6 +59,7 @@ app.get("/", (req, res) => {
   });
 });
 
+//API
 app.get("/api", (req, res) => {
   res.send("ExpressJS Server");
 });
@@ -64,7 +75,7 @@ app.get("/api/prices", (req, res) => {
 });
 
 app.post("/api/prices", (req, res) => {
-  if (req.params && req.params.key && process.env.KEYS && process.env.KEYS.includes(req.params.key)) {
+  if (req.body && req.body.key && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
 
     // for the prices boundaries
     const tierlimits = require("./tierlimits.json");
@@ -88,13 +99,14 @@ app.post("/api/prices", (req, res) => {
 });
 
 app.post("/api/serialnumbers", (req, res) => {
-  if (req.params && req.params.key && process.env.KEYS && process.env.KEYS.includes(req.params.key)) {
+  if (req.body && req.body.key && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
 
     return res.json({ access: true });
 
   } else return res.json({ error: "Your KEY was declined!" });
 });
 
+//DASH FINISHED
 app.get("/dash", (req, res) => {
   if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
@@ -113,25 +125,76 @@ app.get("/dash", (req, res) => {
     });
     json += "]";
 
-    const index = fs.readFileSync("./dash.html");
+    const dash1 = fs.readFileSync("./dash1.html");
+    const dash2 = fs.readFileSync("./dash2.html");
       
     return res.send(`
-      ${index}
+      ${dash1}
       ${json}
-            </div>
-          </div>
-        </div>
-      </body>
-      </html>
+      ${dash2}
     `);
 
   } else return res.json({ error: "Your KEY was declined!" });
 });
 
+//ADD FINISHED
+app.post("/add", (req, res) => {
+  if (req.body && req.body.key && req.body.name && req.body.price && req.body.tier && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
+    
+    if(!Number.isInteger(req.body.price)) return res.json({ error: "price is not an integer!" });
+    const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
+
+    const rows = db.prepare("SELECT * FROM items;").all();
+    rows.forEach(r => {
+      if(r.name.toLowerCase() === req.body.name.toLowerCase()) {
+        //RECORD ALREADY EXISTS -> UPDATING
+        db.exec(`
+          UPDATE items 
+          SET price = ${req.body.price}, tier = ${req.body.price}
+          WHERE name = ${capitalized};
+        `);
+
+      } else {
+        //RECORD DOESN'T YET EXIST -> INSERTING
+        db.exec(`
+          INSERT INTO items (id, name, price, tier)
+          VALUES (NULL, ${capitalized}, ${req.body.price}, ${req.body.tier}); 
+        `);
+      }
+    });
+    return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=add`);
+  } else return res.json({ error: "Your KEY was declined!" });
+});
+
+//REMOVE FINISHED
+app.post("/remove", (req, res) => {
+  if (req.body && req.body.key && req.body.name && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
+    const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
+
+    const rows = db.prepare("SELECT * FROM items;").all();
+    rows.forEach(r => {
+      if(r.name.toLowerCase() === req.body.name.toLowerCase()) {
+        //RECORD EXISTS -> REMOVING
+        db.exec(`
+          DELETE FROM items 
+          WHERE name = '${capitalized}';
+        `);
+        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=remove`);
+
+      } else {
+        //RECORD DOESN'T EXIST -> FAIL
+        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=fail`);
+      }
+    });
+  } else return res.json({ error: "Your KEY was declined!" });
+});
+
+// * FINISHED
 app.get("*", (req, res) => {
   res.redirect("/");
 });
 
+//LISTENER FINISHED
 const listener = app.listen(PORT, () => {
   console.log(listener.address());
   console.log(`⚡️[server]: Server is running at http://0.0.0.0:${PORT}`);

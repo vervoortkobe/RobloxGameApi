@@ -1,0 +1,32 @@
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  if(window.location.search.includes("?key=")) {
+    document.title = `Dashboard | ${window.location.search.split("&success=")[0].replace("?key=", "")}`;
+    document.getElementById("key1").setAttribute("value", window.location.search.split("&success=")[0].replace("?key=", ""));
+    document.getElementById("key2").setAttribute("value", window.location.search.split("&success=")[0].replace("?key=", ""));
+  }
+  if(window.location.search.includes("&success=")) {
+    document.getElementById("success").style.display = "block";
+    if(window.location.search.includes("&success=add")) {
+      console.log("add");
+      document.getElementById("successtitle").innerHTML = `✅ Add`;
+      document.getElementById("successdesc").innerHTML = `Your record was successfully added to the database!`;
+    } else if(window.location.search.includes("&success=remove")) {
+      document.getElementById("successtitle").innerHTML = `✅ Remove`;
+      document.getElementById("successdesc").innerHTML = `Your record was successfully removed from the database!`;
+    } else if(window.location.search.includes("&success=fail")) {
+      document.getElementById("successdiv").setAttribute("class", "alert alert-dismissible alert-danger");
+      document.getElementById("successtitle").innerHTML = `❌ Remove`;
+      document.getElementById("successdesc").innerHTML = `Your record wasn't removed, because it doesn't exist!`;
+    }
+  }
+  setTimeout(() => {
+    document.getElementById("preload").style.display = "none";
+    document.getElementById("pagecontent").style.display = "block";
+  }, 000);
+</script>
+</html>

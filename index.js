@@ -113,7 +113,7 @@ app.get("/dash", (req, res) => {
     });
     json += "}";
 
-    const index = fs.readFileSync("./index.html");
+    const index = fs.readFileSync("./dash.html");
       
     return res.send(`
       ${index}

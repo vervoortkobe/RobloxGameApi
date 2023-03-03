@@ -36,22 +36,33 @@ app.get("/", (req, res) => {
   res.json({
     endpoints: [
       {
-        first: {
-          url: `https://${req.hostname}/api/prices?key=YOUR_ACCESS_KEY`,
-          accepts: "none/read-only",
-          method: "GET",
-          returns: "{ \"Key\": [100, \"F\"] //Name: [Price, \"Tier\"] }",
-          returnType: "json"
-        }
+        GET: [
+          {
+            url: `https://${req.hostname}/api/prices?key=YOUR_ACCESS_KEY`,
+            accepts: "none/read-only",
+            method: "GET",
+            returns: "{ \"Key\": [100, \"F\"] } //{ \"Name\": [Price, \"Tier\"] }",
+            returnType: "json"
+          },
+          {
+            url: `https://${req.hostname}/api/snumbers?key=YOUR_ACCESS_KEY`,
+            accepts: "none/read-only",
+            method: "GET",
+            returns: "{ \"Key\": 23, \"Dirt\": 12 } //{ \"Name\": Id, \"Name\": Id }",
+            returnType: "json"
+          }
+        ]
       },
       {
-        second: {
-          url: `https://${req.hostname}/api/serialnumbers/`,
-          accepts: "string (key), YOUR_ACCESS_KEY (string)",
-          method: "POST",
-          returns: "{ \"Key\": 23, \"Dirt\": 12 }",
-          returnType: "json"
-        }
+        POST: [
+          {
+            url: `https://${req.hostname}/api/snumbers`,
+            accepts: "{ \"Key\": \"YOUR_ACCESS_KEY (String)\", \"Name\": \"Dirt\", \"Id\" (Number/Int) }",
+            method: "POST",
+            returns: "{ \"Key\": 23, \"Dirt\": 12 } //{ \"Name\": Id/Snumber, \"Name\": ID/Snumber }",
+            returnType: "json"
+          }
+        ]
       }
     ]
   });
@@ -67,7 +78,7 @@ app.get("/api/prices", (req, res) => {
   console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/prices!`, "\x1b[0m", "");
   if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
-    const rows = db.prepare("SELECT * FROM items;").all();
+    const rows = db.prepare("SELECT price,  FROM items;").all();
 
     return res.json(rows);
 

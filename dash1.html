@@ -26,7 +26,7 @@
     .success {
       height: auto;
       width: 30vw;
-      position: absolute;
+      position: fixed;
       right: 2vw;
       top: 4vh;
     }
@@ -188,7 +188,7 @@
 <body style="background-color: #1e1e1e;">
   <div class="pagecontent" id="pagecontent">
     <h1>Dashboard</h1>
-    <div id="success" class="success slideIn">
+    <div id="success" class="success">
       <div id="successdiv" class="alert alert-dismissible alert-success">
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         <b id="successtitle">ACTION</b><br><span id="successdesc">DESCRIPTION</span>
@@ -196,7 +196,7 @@
     </div>
     <div class="grid">
       <div class="post-form">
-        <form action="add" method="POST">
+        <form action="/dash/add" method="POST">
           <label for="key">Key</label>
           <input type="text" name="key" placeholder="Key" id="key1" class="form-control" value="" required readonly minlength="1" maxlength="20"><br>
           <label for="name">Name</label>
@@ -209,7 +209,7 @@
         </form>
       </div>
       <div class="post-form">
-        <form action="remove" method="POST">
+        <form action="/dash/remove" method="POST">
           <label for="key">Key</label>
           <input type="text" name="key" placeholder="Key" id="key2" class="form-control" value="" required readonly minlength="1" maxlength="20"><br>
           <label for="name">Name</label>

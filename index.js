@@ -138,55 +138,51 @@ app.get("/dash", (req, res) => {
 });
 
 //ADD FINISHED
-app.post("/add", (req, res) => {
+app.post("/dash/add", (req, res) => {
   if (req.body && req.body.key && req.body.name && req.body.price && req.body.tier && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
-    
-    if(!Number.isInteger(req.body.price)) return res.json({ error: "price is not an integer!" });
+
+    if(isNaN(+req.body.price) || !typeof +req.body.price === "number") return res.json({ error: "price is not an integer!" });
     const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
     const rows = db.prepare("SELECT * FROM items;").all();
-    rows.forEach(r => {
-      if(r.name.toLowerCase() === req.body.name.toLowerCase()) {
-        //RECORD ALREADY EXISTS -> UPDATING
-        db.exec(`
-          UPDATE items 
-          SET price = ${req.body.price}, tier = ${req.body.price}
-          WHERE name = ${capitalized};
-        `);
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=update`);
+    if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
+      //RECORD ALREADY EXISTS -> UPDATING
+      db.exec(`
+        UPDATE items 
+        SET price = ${+req.body.price}, tier = '${req.body.tier}'
+        WHERE name = '${capitalized}';
+      `);
+      return res.redirect(`http://${req.hostname}/dash?key=${req.body.key}&success=update`);
 
-      } else {
-        //RECORD DOESN'T YET EXIST -> INSERTING
-        db.exec(`
-          INSERT INTO items (id, name, price, tier)
-          VALUES (NULL, ${capitalized}, ${req.body.price}, ${req.body.tier}); 
-        `);
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=add`);
-      }
-    });
+    } else {
+      //RECORD DOESN'T YET EXIST -> INSERTING
+      db.exec(`
+        INSERT INTO items (id, name, price, tier)
+        VALUES (NULL, '${capitalized}', ${+req.body.price}, '${req.body.tier}'); 
+      `);
+      return res.redirect(`http://${req.hostname}/dash?key=${req.body.key}&success=add`);
+    }
   } else return res.json({ error: "Your KEY was declined!" });
 });
 
 //REMOVE FINISHED
-app.post("/remove", (req, res) => {
+app.post("/dash/remove", (req, res) => {
   if (req.body && req.body.key && req.body.name && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
     const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
     const rows = db.prepare("SELECT * FROM items;").all();
-    rows.forEach(r => {
-      if(r.name.toLowerCase() === req.body.name.toLowerCase()) {
-        //RECORD EXISTS -> REMOVING
-        db.exec(`
-          DELETE FROM items 
-          WHERE name = '${capitalized}';
-        `);
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=remove`);
+    if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
+      //RECORD EXISTS -> REMOVING
+      db.exec(`
+        DELETE FROM items 
+        WHERE name = '${capitalized}';
+      `);
+      return res.redirect(`http://${req.hostname}/dash?key=${req.body.key}&success=remove`);
 
-      } else {
-        //RECORD DOESN'T EXIST -> FAIL
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=fail`);
-      }
-    });
+    } else {
+      //RECORD DOESN'T EXIST -> FAIL
+      return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=fail`);
+    }
   } else return res.json({ error: "Your KEY was declined!" });
 });
 

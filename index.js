@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const fs = require("fs");
-const db = require("better-sqlite3")("./itemdb.sqlite3", { verbose: console.log });
+const db = require("better-sqlite3")("./itemdb.sqlite3");//, { verbose: console.log });
 const requestIp = require("request-ip");
 
 const app = express();

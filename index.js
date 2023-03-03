@@ -2,18 +2,15 @@ const express = require("express");
 require("dotenv").config();
 const fs = require("fs");
 const db = require("better-sqlite3")("./itemdb.sqlite3", { verbose: console.log });
+const requestIp = require("request-ip");
 
 const app = express();
 const PORT = 80; //process.env.PORT;
 
-/*app.use(session({
-	secret: process.env.EXPRESS_APP_SESSIONSECRET,
-	resave: true,
-	saveUninitialized: true
-}));*/
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(requestIp.mw());
 
 //BOOTSTRAP DIR HOST
 let bootstraps = fs.readdirSync("./bootstrap-5.1.3-dist/css/themes/", { withFileTypes: true });
@@ -35,6 +32,7 @@ app.get("/bootstrap-5.1.3-dist/js/bootstrap.min.js.map", (req, res) => {
 
 // /
 app.get("/", (req, res) => {
+  console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /!`, "\x1b[0m", "");
   res.json({
     endpoints: [
       {
@@ -61,10 +59,12 @@ app.get("/", (req, res) => {
 
 //API
 app.get("/api", (req, res) => {
+  console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api!`, "\x1b[0m", "");
   res.send("ExpressJS Server");
 });
 
 app.get("/api/prices", (req, res) => {
+  console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/prices!`, "\x1b[0m", "");
   if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
     const rows = db.prepare("SELECT * FROM items;").all();
@@ -75,8 +75,9 @@ app.get("/api/prices", (req, res) => {
 });
 
 app.post("/api/prices", (req, res) => {
+  console.log("\x1b[35m", `> (POST) ${req.clientIp} visited /api/prices!`, "\x1b[0m", "");
   if (req.body && req.body.key && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
-
+    console.log("\x1b[33m", `> (UNKNOWN) Anonymous visited /!`, "\x1b[0m", "");
     // for the prices boundaries
     const tierlimits = require("./tierlimits.json");
 
@@ -98,9 +99,10 @@ app.post("/api/prices", (req, res) => {
   } else return res.json({ error: "Your KEY was declined!" });
 });
 
-app.post("/api/serialnumbers", (req, res) => {
+app.post("/api/serialnrs", (req, res) => {
+  console.log("\x1b[35m", `> (POST) ${req.clientIp} visited /api/serialnrs!`, "\x1b[0m", "");
   if (req.body && req.body.key && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
-
+    console.log("\x1b[33m", `> (UNKNOWN) Anonymous visited /!`, "\x1b[0m", "");
     return res.json({ access: true });
 
   } else return res.json({ error: "Your KEY was declined!" });
@@ -108,6 +110,7 @@ app.post("/api/serialnumbers", (req, res) => {
 
 //DASH FINISHED
 app.get("/dash", (req, res) => {
+  console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /dash!`, "\x1b[0m", "");
   if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
     let json = "";
@@ -139,14 +142,17 @@ app.get("/dash", (req, res) => {
 
 //ADD FINISHED
 app.post("/dash/add", (req, res) => {
+  console.log("\x1b[35m", `> (POST) ${req.clientIp} visited /dash/add!`, "\x1b[0m", "");
   if (req.body && req.body.key && req.body.name && req.body.price && req.body.tier && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
 
     if(isNaN(+req.body.price) || !typeof +req.body.price === "number") return res.json({ error: "price is not an integer!" });
+
     const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
     const rows = db.prepare("SELECT * FROM items;").all();
     if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
       //RECORD ALREADY EXISTS -> UPDATING
+      console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated {"name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}"} using /dash/add!`, "\x1b[0m", "");
       db.exec(`
         UPDATE items 
         SET price = ${+req.body.price}, tier = '${req.body.tier}'
@@ -156,6 +162,7 @@ app.post("/dash/add", (req, res) => {
 
     } else {
       //RECORD DOESN'T YET EXIST -> INSERTING
+      console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} added {"name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}"} using /dash/add!`, "\x1b[0m", "");
       db.exec(`
         INSERT INTO items (id, name, price, tier)
         VALUES (NULL, '${capitalized}', ${+req.body.price}, '${req.body.tier}'); 
@@ -167,12 +174,14 @@ app.post("/dash/add", (req, res) => {
 
 //REMOVE FINISHED
 app.post("/dash/remove", (req, res) => {
+  console.log("\x1b[35m", `> ✅ (POST) ${req.clientIp} visited /dash/remove!`, "\x1b[0m", "");
   if (req.body && req.body.key && req.body.name && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
     const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
     const rows = db.prepare("SELECT * FROM items;").all();
     if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
       //RECORD EXISTS -> REMOVING
+      console.log("\x1b[33m", `> ❌ (POST) ${req.clientIp} removed {"name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}"} using /dash/remove!`, "\x1b[0m", "");
       db.exec(`
         DELETE FROM items 
         WHERE name = '${capitalized}';
@@ -181,6 +190,7 @@ app.post("/dash/remove", (req, res) => {
 
     } else {
       //RECORD DOESN'T EXIST -> FAIL
+      console.log("\x1b[31m", `> (POST) ${req.clientIp} failed to remove {"name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}"} using /dash/remove!`, "\x1b[0m", "");
       return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=fail`);
     }
   } else return res.json({ error: "Your KEY was declined!" });

@@ -153,6 +153,7 @@ app.post("/add", (req, res) => {
           SET price = ${req.body.price}, tier = ${req.body.price}
           WHERE name = ${capitalized};
         `);
+        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=update`);
 
       } else {
         //RECORD DOESN'T YET EXIST -> INSERTING
@@ -160,9 +161,9 @@ app.post("/add", (req, res) => {
           INSERT INTO items (id, name, price, tier)
           VALUES (NULL, ${capitalized}, ${req.body.price}, ${req.body.tier}); 
         `);
+        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=add`);
       }
     });
-    return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=add`);
   } else return res.json({ error: "Your KEY was declined!" });
 });
 

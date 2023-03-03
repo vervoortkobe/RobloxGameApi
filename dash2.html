@@ -12,9 +12,11 @@
   if(window.location.search.includes("&success=")) {
     document.getElementById("success").style.display = "block";
     if(window.location.search.includes("&success=add")) {
-      console.log("add");
       document.getElementById("successtitle").innerHTML = `✅ Add`;
       document.getElementById("successdesc").innerHTML = `Your record was successfully added to the database!`;
+    } else if(window.location.search.includes("&success=update")) {
+      document.getElementById("successtitle").innerHTML = `✅ Add`;
+      document.getElementById("successdesc").innerHTML = `Your record was successfully updated in the database!`;
     } else if(window.location.search.includes("&success=remove")) {
       document.getElementById("successtitle").innerHTML = `✅ Remove`;
       document.getElementById("successdesc").innerHTML = `Your record was successfully removed from the database!`;
@@ -25,8 +27,13 @@
     }
   }
   setTimeout(() => {
+    const success = document.getElementById("success");
+    success.classList.remove("slideIn");
+    success.classList.add("slideOut");
+  }, 5000);
+  setTimeout(() => {
     document.getElementById("preload").style.display = "none";
     document.getElementById("pagecontent").style.display = "block";
-  }, 000);
+  }, 200);
 </script>
 </html>

@@ -24,25 +24,41 @@
     .post-form input[type="submit"] { width: 100%; padding: 10px; font-weight: bold; font-size: 16px; }
     
     .success {
-      display: none;
       height: auto;
       width: 30vw;
       position: absolute;
       right: 2vw;
       top: 4vh;
+    }
+    .slideIn {
       animation-duration: 1s;
-      animation-name: slide;
+      animation-name: slideIn;
       animation-timing-function: ease-in-out;
+      animation-fill-mode: backwards;
+    }
+    .slideOut {
+      animation-duration: 1s;
+      animation-name: slideOut;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: forwards;
     }
     .success .btn-close {
       margin-top: 1.8vh;
     }
-    @keyframes slide {
+    @keyframes slideIn {
       0% {
         transform: translate(35vw);
       }
       100% {
         transform: translate(0vw);
+      }
+    }
+    @keyframes slideOut {
+      0% {
+        transform: translate(0vw);
+      }
+      100% {
+        transform: translate(35vw);
       }
     }
     .grid {
@@ -172,7 +188,7 @@
 <body style="background-color: #1e1e1e;">
   <div class="pagecontent" id="pagecontent">
     <h1>Dashboard</h1>
-    <div id="success" class="success">
+    <div id="success" class="success slideIn">
       <div id="successdiv" class="alert alert-dismissible alert-success">
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         <b id="successtitle">ACTION</b><br><span id="successdesc">DESCRIPTION</span>

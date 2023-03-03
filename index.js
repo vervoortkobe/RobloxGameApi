@@ -152,7 +152,7 @@ app.post("/dash/add", (req, res) => {
         SET price = ${+req.body.price}, tier = '${req.body.tier}'
         WHERE name = '${capitalized}';
       `);
-      return res.redirect(`http://${req.hostname}/dash?key=${req.body.key}&success=update`);
+      return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=update`);
 
     } else {
       //RECORD DOESN'T YET EXIST -> INSERTING
@@ -160,7 +160,7 @@ app.post("/dash/add", (req, res) => {
         INSERT INTO items (id, name, price, tier)
         VALUES (NULL, '${capitalized}', ${+req.body.price}, '${req.body.tier}'); 
       `);
-      return res.redirect(`http://${req.hostname}/dash?key=${req.body.key}&success=add`);
+      return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=add`);
     }
   } else return res.json({ error: "Your KEY was declined!" });
 });
@@ -177,7 +177,7 @@ app.post("/dash/remove", (req, res) => {
         DELETE FROM items 
         WHERE name = '${capitalized}';
       `);
-      return res.redirect(`http://${req.hostname}/dash?key=${req.body.key}&success=remove`);
+      return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=remove`);
 
     } else {
       //RECORD DOESN'T EXIST -> FAIL

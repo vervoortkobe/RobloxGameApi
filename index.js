@@ -1,9 +1,9 @@
 require("dotenv").config();
 
-function index(app) {
+function index(app, timestamp) {
   // /
   app.get("/", (req, res) => {
-    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /!`, "\x1b[0m", "");
+    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /! | ${timestamp}`, "\x1b[0m", "");
     res.json({
       endpoints: [
         {
@@ -41,7 +41,7 @@ function index(app) {
 
   //API
   app.get("/api", (req, res) => {
-    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api!`, "\x1b[0m", "");
+    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api! | ${timestamp}`, "\x1b[0m", "");
     res.send("ExpressJS Server");
   });
 }

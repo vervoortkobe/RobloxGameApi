@@ -12,11 +12,14 @@ app.use(express.json());
 
 app.use(requestIp.mw());
 
+//TIMESTAMP CONSTANT
+const timestamp = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()} ${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`;
+
 //MODULES 
 require("./bootstrap.js").bootstrap(fs, app);
-require("./index.js").index(app);
-require("./api.js").api(db, app);
-require("./dash.js").dash(fs, db, app);
+require("./index.js").index(app, timestamp);
+require("./api.js").api(db, app, timestamp);
+require("./dash.js").dash(fs, db, app, timestamp);
 
 // * 
 app.get("*", (req, res) => {

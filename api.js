@@ -6,9 +6,15 @@ function api(db, app) {
     console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/prices!`, "\x1b[0m", "");
     if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
-      const rows = db.prepare("SELECT price,  FROM items;").all();
-
-      return res.json(rows);
+      const rows = db.prepare("SELECT name, price, tier FROM items;").all();
+      let json = "";
+      rows.forEach(r => {
+        json += `"${r.name}": [${r.price}, "${r.tier}"],`;
+      });
+      console.log(json);
+      const parsed = JSON.parse(`{ ${json.slice(0, -1)}}`);
+      console.log(parsed);
+      return res.json(parsed);
 
     } else return res.json({ error: "Your KEY was declined!" });
   });

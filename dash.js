@@ -14,12 +14,13 @@ function dash(fs, db, app) {
       rows.forEach(r => {
         //console.log(r);
         json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
-          <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>, 
-          <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>, 
-          <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">\"${r.price}\"</b>, 
-          <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b> }, <br>`;
+          <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>,
+          <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>,
+          <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">\"${r.price}\"</b>,
+          <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>},<br>`;
       });
       json += "]";
+      json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
 
       const dash1 = fs.readFileSync("./dash1.html");
       const dash2 = fs.readFileSync("./dash2.html");

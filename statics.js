@@ -2,12 +2,12 @@ require("dotenv").config();
 
 function statics(fs, app) {
   //STYLE.CSS
-  app.get("/style.css", (req, res) => {
+  app.get("/dash/style.css", (req, res) => {
     res.sendFile(`${__dirname}/dash/style.css`);
   });
   
   //SCRIPT.JS
-  app.get("/script.js", (req, res) => {
+  app.get("/dash/script.js", (req, res) => {
     res.sendFile(`${__dirname}/dash/script.js`);
   });
 

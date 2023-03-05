@@ -12,14 +12,14 @@ function index(app) {
               url: `https://${req.hostname}/api/prices?key=YOUR_ACCESS_KEY`,
               accepts: "none/read-only",
               method: "GET",
-              returns: "{ \"Key\": [100, \"F\"] } //{ \"Name\": [Price, \"Tier\"] }",
+              returns: "{ \"Name\": [Price, \"Tier\"] }",
               returnType: "json"
             },
             {
               url: `https://${req.hostname}/api/snumbers?key=YOUR_ACCESS_KEY`,
               accepts: "none/read-only",
               method: "GET",
-              returns: "{ \"Key\": 23, \"Dirt\": 12 } //{ \"Name\": Id, \"Name\": Id }",
+              returns: "{ \"Name\": Id }",
               returnType: "json"
             }
           ]
@@ -28,9 +28,9 @@ function index(app) {
           POST: [
             {
               url: `https://${req.hostname}/api/snumbers`,
-              accepts: "{ \"Key\": \"YOUR_ACCESS_KEY (String)\", \"Name\": \"Dirt\", \"Id\" (Number/Int) }",
+              accepts: "{ \"key\": \"YOUR_ACCESS_KEY (String)\", \"name\": \"Name (String)\", \"id\": New value for setting/increasing Id (Number/Int) }",
               method: "POST",
-              returns: "{ \"Key\": 23, \"Dirt\": 12 } //{ \"Name\": Id/Snumber, \"Name\": ID/Snumber }",
+              returns: "{ \"success\": true/false (Bool), \"error\": Error reason (String) }",
               returnType: "json"
             }
           ]

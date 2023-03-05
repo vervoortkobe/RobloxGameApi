@@ -38,10 +38,10 @@ function api(db, app, timestamp) {
     console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
     if(req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
-      const rows = db.prepare("SELECT name, id FROM items;").all();
+      const rows = db.prepare("SELECT name, snr FROM items;").all();
       let json = "";
       rows.forEach(r => {
-        json += `"${r.name}": ${r.id},`;
+        json += `"${r.name}": ${r.snr},`;
       });
 
       const parsed = JSON.parse(`{ ${json.slice(0, -1)}}`);
@@ -54,17 +54,38 @@ function api(db, app, timestamp) {
   app.post("/api/snumbers", (req, res) => {
     console.log("\x1b[35m", `> (POST) ${req.clientIp} visited /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
     if(req.body && req.body.key && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
-      if(req.body.key && req.body.name && req.body.id) {
+      if(req.body.key && req.body.name) {
 
+        const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
+        const rows = db.prepare("SELECT name, snr FROM items;").all();
+        if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
+          //RECORD ALREADY EXISTS -> UPDATING
+          console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated { "name": "${capitalized}", "snr": "${++r.snr}" } using /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
+          db.exec(`
+            UPDATE items 
+            SET id = ${++r.snr}
+            WHERE name = '${capitalized}';
+          `);
 
-        return res.json({ success: true });
+          return res.json({ success: true });
+        } else return res.json({ success: false, error: "There is no such item with that NAME yet!" });
 
       } else {
         let params = [];
-        if(!req.body.key) params.push("KEY");
-        if(!req.body.name) params.push("NAME");
-        if(!req.body.id) params.push("ID");
+        switch (true) {
+          case !req.body.key:
+            params.push("KEY");
+            break;
+          case !req.body.name:
+            params.push("NAME");
+            break;
+          case !req.body.snr:
+            params.push("SNR");
+            break;
+          default:
+            break;
+        }
         params = JSON.stringify(params.join(", "));
         return res.json({ success: false, error: `The following parameters are missing: ${params}` });
       }

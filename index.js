@@ -19,7 +19,7 @@ function index(app, timestamp) {
               url: `https://${req.hostname}/api/snumbers?key=YOUR_ACCESS_KEY`,
               accepts: "none/read-only",
               method: "GET",
-              returns: "{ \"Name\": Id }",
+              returns: "{ \"Name\": Snr }",
               returnType: "json"
             }
           ]
@@ -28,7 +28,7 @@ function index(app, timestamp) {
           POST: [
             {
               url: `https://${req.hostname}/api/snumbers`,
-              accepts: "{ \"key\": \"YOUR_ACCESS_KEY (String)\", \"name\": \"Name (String)\", \"id\": New value for setting/increasing Id (Number/Int) }",
+              accepts: "{ \"key\": \"YOUR_ACCESS_KEY (String)\", \"name\": \"Name (String)\" }",
               method: "POST",
               returns: "{ \"success\": true/false (Bool), \"error\": Error reason (String) }",
               returnType: "json"

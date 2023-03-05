@@ -18,8 +18,9 @@ function dash(fs, db, app, timestamp) {
         json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
           <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>,
           <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>,
-          <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">\"${r.price}\"</b>,
-          <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>},<br>`;
+          <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.price}</b>,
+          <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>,
+          <span>\"snr\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.snr}</b>},<br>`;
       });
       json += "]";
       json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
@@ -48,7 +49,7 @@ function dash(fs, db, app, timestamp) {
       const rows = db.prepare("SELECT * FROM items;").all();
       if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
         //RECORD ALREADY EXISTS -> UPDATING
-        console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated {"name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}"} using /dash/add! | ${timestamp}`, "\x1b[0m", "");
+        console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated { "name": "${capitalized}", "price": ${+req.body.price}, "tier": "${req.body.tier}" } using /dash/add! | ${timestamp}`, "\x1b[0m", "");
         db.exec(`
           UPDATE items 
           SET price = ${+req.body.price}, tier = '${req.body.tier}'
@@ -58,10 +59,10 @@ function dash(fs, db, app, timestamp) {
 
       } else {
         //RECORD DOESN'T YET EXIST -> INSERTING
-        console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} added {"name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}"} using /dash/add! | ${timestamp}`, "\x1b[0m", "");
+        console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} added { "name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}", "snr": 1 } using /dash/add! | ${timestamp}`, "\x1b[0m", "");
         db.exec(`
-          INSERT INTO items (id, name, price, tier)
-          VALUES (NULL, '${capitalized}', ${+req.body.price}, '${req.body.tier}'); 
+          INSERT INTO items (id, name, price, tier, snr)
+          VALUES (NULL, '${capitalized}', ${+req.body.price}, '${req.body.tier}', 1); 
         `);
         return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=add`);
       }
@@ -72,12 +73,12 @@ function dash(fs, db, app, timestamp) {
   app.post("/dash/remove", (req, res) => {
     console.log("\x1b[35m", `> ✅ (POST) ${req.clientIp} visited /dash/remove! | ${timestamp}`, "\x1b[0m", "");
     if(req.body && req.body.key && req.body.name && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
-      const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
       const rows = db.prepare("SELECT * FROM items;").all();
       if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
         //RECORD EXISTS -> REMOVING
-        console.log("\x1b[33m", `> ❌ (POST) ${req.clientIp} removed {"name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}"} using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
+        const capitalized = r.name.charAt(0).toUpperCase() + r.name.slice(1);
+        console.log("\x1b[33m", `> ❌ (POST) ${req.clientIp} removed { "name": "${capitalized}", "price": "${+r.price}", "tier": "${r.tier}", "snr": ${r.snr} } using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
         db.exec(`
           DELETE FROM items 
           WHERE name = '${capitalized}';
@@ -86,7 +87,8 @@ function dash(fs, db, app, timestamp) {
 
       } else {
         //RECORD DOESN'T EXIST -> FAIL
-        console.log("\x1b[31m", `> (POST) ${req.clientIp} failed to remove {"name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}"} using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
+        const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
+        console.log("\x1b[31m", `> (POST) ${req.clientIp} failed to remove { "name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}", "snr": 1 } using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
         return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=fail`);
       }
     } else return res.json({ error: "Your KEY was declined!" });

@@ -12,17 +12,18 @@ app.use(express.json());
 
 app.use(requestIp.mw());
 
+//MODULES 
 require("./bootstrap.js").bootstrap(fs, app);
 require("./index.js").index(app);
 require("./api.js").api(db, app);
 require("./dash.js").dash(fs, db, app);
 
-// * FINISHED
+// * 
 app.get("*", (req, res) => {
   res.redirect("/");
 });
 
-//LISTENER FINISHED
+//LISTENER 
 const listener = app.listen(PORT, () => {
   console.log(listener.address());
   console.log(`⚡️[server]: Server is running at http://0.0.0.0:${PORT}`);

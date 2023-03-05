@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 function dash(fs, db, app) {
-  //GET /DASH FINISHED
+  //GET /DASH 
   app.get("/dash", (req, res) => {
     console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /dash!`, "\x1b[0m", "");
     if (req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
@@ -33,7 +33,7 @@ function dash(fs, db, app) {
     } else return res.json({ error: "Your KEY was declined!" });
   });
 
-  //POST /DASH/ADD FINISHED
+  //POST /DASH/ADD 
   app.post("/dash/add", (req, res) => {
     console.log("\x1b[35m", `> (POST) ${req.clientIp} visited /dash/add!`, "\x1b[0m", "");
     if (req.body && req.body.key && req.body.name && req.body.price && req.body.tier && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
@@ -65,7 +65,7 @@ function dash(fs, db, app) {
     } else return res.json({ error: "Your KEY was declined!" });
   });
 
-  //POST /DASH/REMOVE FINISHED
+  //POST /DASH/REMOVE 
   app.post("/dash/remove", (req, res) => {
     console.log("\x1b[35m", `> ✅ (POST) ${req.clientIp} visited /dash/remove!`, "\x1b[0m", "");
     if (req.body && req.body.key && req.body.name && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {

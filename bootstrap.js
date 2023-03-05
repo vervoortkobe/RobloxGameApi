@@ -18,7 +18,6 @@ function bootstrap(fs, app) {
   app.get("/bootstrap-5.1.3-dist/js/bootstrap.min.js.map", (req, res) => {
     res.sendFile(`${__dirname}/bootstrap-5.1.3-dist/js/bootstrap.min.js.map`);
   });
-
 }
 
 module.exports = { bootstrap };

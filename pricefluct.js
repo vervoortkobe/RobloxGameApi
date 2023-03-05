@@ -7,7 +7,7 @@ async function pricefluct(db, app, timestamp) {
     else if(newprice > tierlimits[tier]) return tierlimits[tier][1];
     return newprice;
   }
-  let updatedTimestamp = 0;
+  let updatedTimestamp = Date.now();
   const rows = db.prepare("SELECT * FROM items;").all();
   setInterval(() => {
     rows.forEach(r => {

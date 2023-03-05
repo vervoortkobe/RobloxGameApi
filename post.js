@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
-const hostname = "localhost";
+const hostname = "";
 
-fetch(`http://${hostname}/api/snumbers`, {
+fetch(`https://${hostname}/api/snumbers`, {
   method: "POST",
   mode: "cors",
   cache: "no-cache",

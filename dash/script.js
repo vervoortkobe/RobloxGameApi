@@ -72,7 +72,7 @@ function fetchAll() {
   let json = "";
 
   //FETCH ALL
-  fetch(`http://${window.location.hostname}/api/all?key=${search.split("&success")[0].replace("?key=", "")}`)
+  fetch(`https://${window.location.hostname}/api/all?key=${search.split("&success")[0].replace("?key=", "")}`)
   .then((res) => {
     return res.json();
   }).then((data) => {
@@ -100,7 +100,7 @@ function fetchAll() {
 }
 
 setInterval(() => {
-  fetch(`http://${window.location.hostname}/api/timestamp?key=${search.split("&success")[0].replace("?key=", "")}`)
+  fetch(`https://${window.location.hostname}/api/timestamp?key=${search.split("&success")[0].replace("?key=", "")}`)
   .then((res) => {
     return res.json();
   }).then((data) => {

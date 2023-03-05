@@ -59,12 +59,14 @@ function api(db, app, timestamp) {
         const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
         const rows = db.prepare("SELECT name, snr FROM items;").all();
-        if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
+        const row = rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase());
+        if(row) {
           //RECORD ALREADY EXISTS -> UPDATING
-          console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated { "name": "${capitalized}", "snr": "${++r.snr}" } using /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
+          ++row.snr;
+          console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated { "name": "${capitalized}", "snr": ${row.snr} } using /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
           db.exec(`
             UPDATE items 
-            SET id = ${++r.snr}
+            SET snr = ${row.snr}
             WHERE name = '${capitalized}';
           `);
 

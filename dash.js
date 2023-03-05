@@ -20,7 +20,7 @@ function dash(fs, db, app, timestamp) {
           <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>,
           <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.price}</b>,
           <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>,
-          <span>\"snr\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.snr}</b>},<br>`;
+          <span>\"snr\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.snr}</b> },<br>`;
       });
       json += "]";
       json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
@@ -47,7 +47,8 @@ function dash(fs, db, app, timestamp) {
       const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
 
       const rows = db.prepare("SELECT * FROM items;").all();
-      if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
+      const row = rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase());
+      if(row) {
         //RECORD ALREADY EXISTS -> UPDATING
         console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated { "name": "${capitalized}", "price": ${+req.body.price}, "tier": "${req.body.tier}" } using /dash/add! | ${timestamp}`, "\x1b[0m", "");
         db.exec(`
@@ -75,10 +76,11 @@ function dash(fs, db, app, timestamp) {
     if(req.body && req.body.key && req.body.name && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
 
       const rows = db.prepare("SELECT * FROM items;").all();
-      if(rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase())) {
+      const row = rows.find(r => r.name.toLowerCase() === req.body.name.toLowerCase());
+      if(row) {
         //RECORD EXISTS -> REMOVING
-        const capitalized = r.name.charAt(0).toUpperCase() + r.name.slice(1);
-        console.log("\x1b[33m", `> ❌ (POST) ${req.clientIp} removed { "name": "${capitalized}", "price": "${+r.price}", "tier": "${r.tier}", "snr": ${r.snr} } using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
+        const capitalized = row.name.charAt(0).toUpperCase() + row.name.slice(1);
+        console.log("\x1b[33m", `> ❌ (POST) ${req.clientIp} removed { "name": "${capitalized}", "price": "${+row.price}", "tier": "${row.tier}", "snr": ${row.snr} } using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
         db.exec(`
           DELETE FROM items 
           WHERE name = '${capitalized}';

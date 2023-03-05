@@ -8,31 +8,8 @@ function dash(fs, db, app, timestamp) {
     console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /dash! | ${timestamp}`, "\x1b[0m", "");
     if(req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
-      let json = "";
-      const rows = db.prepare("SELECT * FROM items;").all();
-      if(rows.length === 0) json = "No database table (items) records yet...";
-
-      json += "[<br>";
-      rows.forEach(r => {
-        //console.log(r);
-        json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
-          <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>,
-          <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>,
-          <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.price}</b>,
-          <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>,
-          <span>\"snr\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.snr}</b> },<br>`;
-      });
-      json += "]";
-      json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
-
-      const dash1 = fs.readFileSync("./dash1.html");
-      const dash2 = fs.readFileSync("./dash2.html");
-        
-      return res.send(`
-        ${dash1}
-        ${json}
-        ${dash2}
-      `);
+      const dash = fs.readFileSync("./dash/dash.html");
+      return res.send(`${dash}`);
 
     } else return res.json({ error: "Your KEY was declined!" });
   });

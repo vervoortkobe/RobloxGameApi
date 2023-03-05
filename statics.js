@@ -1,6 +1,16 @@
 require("dotenv").config();
 
-function bootstrap(fs, app) {
+function statics(fs, app) {
+  //STYLE.CSS
+  app.get("/dash/style.css", (req, res) => {
+    res.sendFile(`${__dirname}/dash/style.css`);
+  });
+  
+  //SCRIPT.JS
+  app.get("/dash/script.js", (req, res) => {
+    res.sendFile(`${__dirname}/dash/script.js`);
+  });
+
   //BOOTSTRAP DIR HOST
   let bootstraps = fs.readdirSync("./bootstrap-5.1.3-dist/css/themes/", { withFileTypes: true });
   bootstraps.forEach(b => {
@@ -20,4 +30,4 @@ function bootstrap(fs, app) {
   });
 }
 
-module.exports = { bootstrap };
+module.exports = { statics };

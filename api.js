@@ -1,6 +1,16 @@
 require("dotenv").config();
 
 function api(db, app, timestamp) {
+  //GET /API/ALL
+  app.get("/api/all", (req, res) => {
+    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/all! | ${timestamp}`, "\x1b[0m", "");
+    if(req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
+
+      const rows = db.prepare("SELECT * FROM items;").all();
+      return res.json(rows);
+    } else return res.json({ error: "Your KEY was declined!" });
+  });
+
   //GET /API/PRICES
   app.get("/api/prices", (req, res) => {
     console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/prices! | ${timestamp}`, "\x1b[0m", "");
@@ -12,22 +22,7 @@ function api(db, app, timestamp) {
         json += `"${r.name}": [${r.price}, "${r.tier}"],`;
       });
 
-      // for the prices boundaries
-      const tierlimits = require("./tierlimits.json");
-
-
-      console.log(tierlimits.F);
-
-      /*{
-        "Key":[30,"F"],
-        "Dirt":[50,"F"]
-      }*/
-
-      function Randomize(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-      }
-
-      const parsed = JSON.parse(`{ ${json.slice(0, -1)}}`);
+      const parsed = JSON.parse(`{${json.slice(0, -1)}}`);
       return res.json(parsed);
 
     } else return res.json({ error: "Your KEY was declined!" });
@@ -44,7 +39,7 @@ function api(db, app, timestamp) {
         json += `"${r.name}": ${r.snr},`;
       });
 
-      const parsed = JSON.parse(`{ ${json.slice(0, -1)}}`);
+      const parsed = JSON.parse(`{${json.slice(0, -1)}}`);
       return res.json(parsed);
 
     } else return res.json({ error: "Your KEY was declined!" });

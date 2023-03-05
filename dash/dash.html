@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link id="favicon" rel="icon" href="">
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,700" rel="stylesheet">
+  <link href="./bootstrap-5.1.3-dist/css/themes/cyborg.bootstrap.min.css" rel="stylesheet">
+  <script src="./bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="./style.css">
+  <script src="./script.js" defer></script>
+
+</head>
+<body>
+  <center>
+    <div id="preload" class="preload">
+      <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </center>
+</body>
+
+<head>
+  <title>Dashboard | ?</title>
+</head>
+<body style="background-color: #1e1e1e;">
+  <div class="pagecontent" id="pagecontent">
+    <h1>Dashboard</h1>
+    <div id="success" class="success">
+      <div id="successdiv" class="alert alert-dismissible alert-success">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <b id="successtitle">ACTION</b><br><span id="successdesc">DESCRIPTION</span>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="post-form">
+        <form action="/dash/add" method="POST">
+          <label for="key">Key</label>
+          <input type="text" name="key" placeholder="Key" id="key1" class="form-control" value="" required readonly minlength="1" maxlength="20"><br>
+          <label for="name">Name</label>
+          <input type="text" name="name" placeholder="Name (20)" id="name" class="form-control" required autofocus minlength="1" maxlength="20"><br>
+          <label for="price">Price</label>
+          <input type="number" name="price" placeholder="Price" id="price" class="form-control" required min="0"><br>
+          <label for="tier">Tier</label>
+          <input type="text" name="tier" placeholder="Tier (5)" id="tier" class="form-control" required minlength="1" maxlength="5"><br>
+          <input type="submit" id="submit" class="btn btn-outline-success" value="Add">
+        </form>
+      </div>
+      <div class="post-form">
+        <form action="/dash/remove" method="POST">
+          <label for="key">Key</label>
+          <input type="text" name="key" placeholder="Key" id="key2" class="form-control" value="" required readonly minlength="1" maxlength="20"><br>
+          <label for="name">Name</label>
+          <input type="text" name="name" placeholder="Name (20)" id="name" class="form-control" required autofocus required minlength="1" maxlength="20"><br>
+          <input type="submit" id="submit" class="btn btn-outline-danger" value="Remove">
+        </form>
+      </div>
+      <div class="json">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      let json = "";
+      const rows = db.prepare("SELECT * FROM items;").all();
+      if(rows.length === 0) json = "No database table (items) records yet...";
+
+      json += "[<br>";
+      rows.forEach(r => {
+        //console.log(r);
+        json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
+          <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>,
+          <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>,
+          <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.price}</b>,
+          <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>,
+          <span>\"snr\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.snr}</b> },<br>`;
+      });
+      json += "]";
+      json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

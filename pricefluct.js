@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-async function pricefluct(db, app, timestamp) {
+async function pricefluct(db, requestIp, app, timestamp) {
   const tierlimits = require("./tierlimits.json"); //PRICE BOUNDARIES
   function checkBoundaries(newprice, tier) {
     if(newprice < tierlimits[tier]) return tierlimits[tier][0];
@@ -41,7 +41,7 @@ async function pricefluct(db, app, timestamp) {
 
   //GET /API/TIMESTAMP
   app.get("/api/timestamp", (req, res) => {
-    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/timestamp! | ${timestamp}`, "\x1b[0m", "");
+    if(requestIp.getClientIp(req) != req.clientIp) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/timestamp! | ${timestamp}`, "\x1b[0m", "");
     if(req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
       return res.json({"latest": updatedTimestamp});
     } else return res.json({ error: "Your KEY was declined!" });

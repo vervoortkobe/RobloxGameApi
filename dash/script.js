@@ -77,11 +77,9 @@ function fetchAll() {
     return res.json();
   }).then((data) => {
 
-    if(data.length === 0) json = "No database table (items) records yet...";
-
     json += "[<br>";
     data.forEach(r => {
-      console.log(r);
+      //console.log(r);
       json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
         <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>,
         <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>,
@@ -91,6 +89,8 @@ function fetchAll() {
     });
     json += "]";
     json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
+
+    if(data.length === 0) json = "No database table (items) records yet...";
 
     jsondiv.innerHTML = json;
 

@@ -1,5 +1,3 @@
-const { timeStamp } = require("console");
-
 require("dotenv").config();
 
 function dash(fs, db, app, timestamp) {
@@ -57,7 +55,7 @@ function dash(fs, db, app, timestamp) {
       if(row) {
         //RECORD EXISTS -> REMOVING
         const capitalized = row.name.charAt(0).toUpperCase() + row.name.slice(1);
-        console.log("\x1b[33m", `> ❌ (POST) ${req.clientIp} removed { "name": "${capitalized}", "price": "${+row.price}", "tier": "${row.tier}", "snr": ${row.snr} } using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
+        console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} removed { "name": "${capitalized}", "price": "${+row.price}", "tier": "${row.tier}", "snr": ${row.snr} } using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
         db.exec(`
           DELETE FROM items 
           WHERE name = '${capitalized}';

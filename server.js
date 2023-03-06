@@ -16,10 +16,10 @@ app.use(requestIp.mw());
 const timestamp = `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()} ${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}`;
 
 //MODULES 
-require("./pricefluct.js").pricefluct(db, app, timestamp);
+require("./pricefluct.js").pricefluct(db, requestIp, app, timestamp);
 require("./statics.js").statics(fs, app);
 require("./index.js").index(app, timestamp);
-require("./api.js").api(db, app, timestamp);
+require("./api.js").api(db, requestIp, app, timestamp);
 require("./dash/dash.js").dash(fs, db, app, timestamp);
 
 // * 

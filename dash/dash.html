@@ -34,6 +34,17 @@
 </head>
 <body style="background-color: #1e1e1e;">
   <div class="pagecontent" id="pagecontent">
+    <div id="blur" class="blur">
+      <div class="post-form">
+        <button id="submitcancel" class="btn btn-outline-success">No, never mind, CANCEL!</button><br>
+        <hr>
+        <form action="/dash/reset" method="POST">
+          <label for="key">Key</label>
+          <input type="text" name="key" placeholder="Key" id="keyreset" class="form-control" value="" required readonly minlength="1" maxlength="20"><br>
+          <input type="submit" id="submitreset" class="btn btn-outline-danger" value="Yes, do it...">
+        </form>
+      </div>
+    </div>
     <h1>Dashboard</h1>
     <div id="success" class="success">
       <div id="successdiv" class="alert alert-dismissible alert-success">
@@ -54,7 +65,7 @@
           <input type="text" name="tier" placeholder="Tier (5)" id="tier" class="form-control" required minlength="1" maxlength="5"><br>
           <label for="snr">Serial Number</label>
           <input type="number" name="snr" placeholder="Serial Number" id="snr" class="form-control" value="1" required min="1" max="16777200"><br>
-          <input type="submit" id="submit" class="btn btn-outline-success" value="Add">
+          <input type="submit" id="submit1" class="btn btn-outline-success" value="Add">
         </form>
       </div>
       <div class="post-form">
@@ -63,11 +74,11 @@
           <input type="text" name="key" placeholder="Key" id="key2" class="form-control" value="" required readonly minlength="1" maxlength="20"><br>
           <label for="name">Name</label>
           <input type="text" name="name" placeholder="Name (20)" id="name" class="form-control" required autofocus required minlength="1" maxlength="20"><br>
-          <input type="submit" id="submit" class="btn btn-outline-danger" value="Remove">
+          <input type="submit" id="submit2" class="btn btn-outline-danger" value="Remove">
         </form>
       </div>
       <div class="post-form">
-        <button type="submit" id="submit" class="btn btn-outline-danger">Reset Serial Numbers</button>
+        <button id="submit3" class="btn btn-outline-danger">Reset Serial Numbers</button>
       </div>
       <div id="json" class="json">
         <!-- INJECT JSON HERE -->

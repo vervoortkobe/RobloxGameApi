@@ -14,7 +14,6 @@ function dash(fs, db, app, timestamp) {
 
   //POST /DASH/ADD 
   app.post("/dash/add", (req, res) => {
-    console.log("\x1b[35m", `> (POST) ${req.clientIp} visited /dash/add! | ${timestamp}`, "\x1b[0m", "");
     if(req.body && req.body.key && req.body.name && req.body.price && req.body.tier && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
 
       if(isNaN(+req.body.price) || !typeof +req.body.price === "number") return res.json({ error: "price is not an integer!" });
@@ -47,7 +46,6 @@ function dash(fs, db, app, timestamp) {
 
   //POST /DASH/REMOVE 
   app.post("/dash/remove", (req, res) => {
-    console.log("\x1b[35m", `> ✅ (POST) ${req.clientIp} visited /dash/remove! | ${timestamp}`, "\x1b[0m", "");
     if(req.body && req.body.key && req.body.name && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
 
       const rows = db.prepare("SELECT * FROM items;").all();
@@ -67,6 +65,28 @@ function dash(fs, db, app, timestamp) {
         const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
         console.log("\x1b[31m", `> (POST) ${req.clientIp} failed to remove { "name": "${capitalized}", "price": "${+req.body.price}", "tier": "${req.body.tier}", "snr": 1 } using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
         return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=fail`);
+      }
+    } else return res.json({ error: "Your KEY was declined!" });
+  });
+
+  //POST /DASH/RESET
+  app.post("/dash/reset", (req, res) => {
+    if(req.body && req.body.key && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
+
+      const rows = db.prepare("SELECT * FROM items;").all();
+      if(rows.length > 0) {
+        //RECORDS EXISTING -> RESETTING SNR
+        console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} reset all serial numbers using /dash/reset! | ${timestamp}`, "\x1b[0m", "");
+        db.exec(`
+          UPDATE items
+          SET snr = 1;
+        `);
+        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=reset`);
+
+      } else {
+        //NO RECORDS EXISTING -> NONE
+        console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} tried resetting all serial numbers using /dash/reset, but there were none! | ${timestamp}`, "\x1b[0m", "");
+        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=reset`);
       }
     } else return res.json({ error: "Your KEY was declined!" });
   });

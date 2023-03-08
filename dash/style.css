@@ -6,7 +6,7 @@ center { position: relative; }
 
 .post-form { width: 18vw; margin: 0 auto; }
 .post-form h1 { padding: 20px 0 20px 0; }
-.post-form input[type="submit"], .post-form button[id="submit"] { width: 100%; padding: 10px; font-weight: bold; font-size: 16px; }
+.post-form input[type="submit"], .post-form button[id="submit3"], .post-form button[id="submitreset"], .post-form button[id="submitcancel"] { width: 100%; padding: 10px; font-weight: bold; font-size: 16px; }
 
 .success {
   height: auto;
@@ -66,7 +66,6 @@ center { position: relative; }
 .grid .post-form:nth-child(2) {
   grid-column: 2/3;
   grid-row: 1/2;
-  margin-top: 2vh;
   border: 1px solid #fff;
   padding: 1rem;
   border-radius: 15px;
@@ -78,7 +77,6 @@ center { position: relative; }
 .grid .post-form:nth-child(3) {
   grid-column: 2/3;
   grid-row: 2/3;
-  margin-top: 2vh;
   border: 1px solid #fff;
   padding: 1rem;
   border-radius: 15px;
@@ -167,4 +165,27 @@ center { position: relative; }
   100% {
     transform: translate(24px, 0);
   }
+}
+.pagecontent {
+  position: absolute;
+  z-index: 1;
+}
+.blur {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, .9);
+  position: absolute;
+  z-index: 2;
+}
+.blur .post-form {
+  border: 1px solid #fff;
+  padding: 1rem;
+  border-radius: 15px;
+  margin-top: 28vh;
+  height: 32vh;
+}
+.blur .post-form input[type="submit"]  {
+  margin-top: -2vh;
+  margin-bottom: 4vh;
 }

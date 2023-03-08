@@ -22,7 +22,12 @@ require("./index.js").index(app, timestamp);
 require("./api.js").api(db, requestIp, app, timestamp);
 require("./dash/dash.js").dash(fs, db, app, timestamp);
 
-// * 
+// GET * 
+app.get("*", (req, res) => {
+  res.redirect("/");
+});
+
+// POST * 
 app.get("*", (req, res) => {
   res.redirect("/");
 });

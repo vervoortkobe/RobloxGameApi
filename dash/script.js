@@ -6,11 +6,16 @@ const successdesc = document.getElementById("successdesc");
 const key1 = document.getElementById("key1");
 const key2 = document.getElementById("key2");
 const jsondiv = document.getElementById("json");
+const keyreset = document.getElementById("keyreset");
+const submit3 = document.getElementById("submit3");
+const blur = document.getElementById("blur");
+const submitcancel = document.getElementById("submitcancel");
 
 if(search.includes("?key=")) {
   document.title = `Dashboard | ${search.split("&success=")[0].replace("?key=", "")}`;
   key1.setAttribute("value", search.split("&success=")[0].replace("?key=", ""));
   key2.setAttribute("value", search.split("&success=")[0].replace("?key=", ""));
+  keyreset.setAttribute("value", search.split("&success=")[0].replace("?key=", ""));
 }
 if(search.includes("&success=")) {
   switch(true) {
@@ -38,6 +43,14 @@ if(search.includes("&success=")) {
         slOut();
         break;
       }
+      case search.includes("&success=reset"):
+        {
+          success.classList.add("slideIn");
+          successtitle.innerHTML = `✅ Reset`;
+          successdesc.innerHTML = `The serial numbers were successfully reset!`;
+          slOut();
+          break;
+        }
     case search.includes("&success=fail"):
       {
         success.classList.add("slideIn");
@@ -57,17 +70,21 @@ if(search.includes("&success=")) {
 }
 function slOut() {
     setTimeout(() => {
-    const success = document.getElementById("success");
     success.classList.remove("slideIn");
     success.classList.add("slideOut");
   }, 3000);
 }
-setTimeout(() => {
-  document.getElementById("preload").style.display = "none";
-  document.getElementById("pagecontent").style.display = "block";
-}, 200);
+
+function preload() {
+  setTimeout(() => {
+    document.getElementById("preload").style.display = "none";
+    document.getElementById("pagecontent").style.display = "block";
+  }, 200);
+}
+preload();
 
 /////////////////////////////////
+
 function fetchAll() {
   let json = "";
 
@@ -114,3 +131,17 @@ setInterval(() => {
 }, 5000);
 
 fetchAll();
+
+/////////////////////////////////
+
+submit3.addEventListener("click", () => {
+  blur.style.display = "block";
+});
+submitcancel.addEventListener("click", () => {
+  success.setAttribute("style", "display: none;");
+  successdiv.setAttribute("style", "display: none;");
+  blur.style.display = "none";
+  document.getElementById("preload").style.display = "block";
+  document.getElementById("pagecontent").style.display = "none";
+  preload();
+});

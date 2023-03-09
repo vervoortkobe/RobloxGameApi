@@ -182,10 +182,15 @@ center { position: relative; }
   border: 1px solid #fff;
   padding: 1rem;
   border-radius: 15px;
-  margin-top: 28vh;
-  height: 32vh;
+  margin-top: 26vh;
+  height: 38.2vh;
 }
 .blur .post-form input[type="submit"]  {
   margin-top: -2vh;
   margin-bottom: 4vh;
+}
+.blur .post-form h5 {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 2vh; 
 }

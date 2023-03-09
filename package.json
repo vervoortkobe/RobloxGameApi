@@ -9,7 +9,7 @@
   },
   "keywords": ["api", "backend", "gameapi"],
   "author": "Tsunami#6271",
-  "license": "ISC",
+  "license": "CC0",
   "dependencies": {
     "@types/node": "^18.0.6",
     "better-sqlite3": "^8.1.0",

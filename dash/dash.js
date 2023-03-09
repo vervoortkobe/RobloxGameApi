@@ -31,7 +31,7 @@ function dash(fs, db, app, timestamp) {
           SET price = ${+req.body.price}, tier = '${req.body.tier}', snr = ${+req.body.snr}
           WHERE name = '${capitalized}';
         `);
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=update`);
+        return res.redirect(`//${req.hostname}/dash?key=${req.body.key}&success=update`);
 
       } else {
         //RECORD DOESN'T YET EXIST -> INSERTING
@@ -40,7 +40,7 @@ function dash(fs, db, app, timestamp) {
           INSERT INTO items (id, name, price, tier, snr)
           VALUES (NULL, '${capitalized}', ${+req.body.price}, '${req.body.tier}', ${req.body.snr}); 
         `);
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=add`);
+        return res.redirect(`//${req.hostname}/dash?key=${req.body.key}&success=add`);
       }
     } else return res.json({ error: "Your KEY was declined!" });
   });
@@ -59,13 +59,13 @@ function dash(fs, db, app, timestamp) {
           DELETE FROM items 
           WHERE name = '${capitalized}';
         `);
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=remove`);
+        return res.redirect(`//${req.hostname}/dash?key=${req.body.key}&success=remove`);
 
       } else {
         //RECORD DOESN'T EXIST -> FAIL
         const capitalized = req.body.name.charAt(0).toUpperCase() + req.body.name.slice(1);
         console.log("\x1b[31m", `> (POST) ${req.clientIp} failed to remove record with "name": "${capitalized}" using /dash/remove! | ${timestamp}`, "\x1b[0m", "");
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=fail`);
+        return res.redirect(`//${req.hostname}/dash?key=${req.body.key}&success=fail`);
       }
     } else return res.json({ error: "Your KEY was declined!" });
   });
@@ -82,12 +82,12 @@ function dash(fs, db, app, timestamp) {
           UPDATE items
           SET snr = 1;
         `);
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=reset`);
+        return res.redirect(`//${req.hostname}/dash?key=${req.body.key}&success=reset`);
 
       } else {
         //NO RECORDS EXISTING -> NONE
         console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} tried resetting all serial numbers using /dash/reset, but there were none! | ${timestamp}`, "\x1b[0m", "");
-        return res.redirect(`https://${req.hostname}/dash?key=${req.body.key}&success=reset`);
+        return res.redirect(`//${req.hostname}/dash?key=${req.body.key}&success=reset`);
       }
     } else return res.json({ error: "Your KEY was declined!" });
   });

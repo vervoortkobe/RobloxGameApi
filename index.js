@@ -3,7 +3,7 @@ require("dotenv").config();
 function index(app, timestamp) {
   // /
   app.get("/", (req, res) => {
-    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /! | ${timestamp}`, "\x1b[0m", "");
+    if(process.env.IPLOGGING === true) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /! | ${timestamp}`, "\x1b[0m", "");
     res.json({
       endpoints: [
         {
@@ -41,7 +41,7 @@ function index(app, timestamp) {
 
   //API
   app.get("/api", (req, res) => {
-    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api! | ${timestamp}`, "\x1b[0m", "");
+    if(process.env.IPLOGGING === true) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api! | ${timestamp}`, "\x1b[0m", "");
     res.send("ExpressJS Server");
   });
 }

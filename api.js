@@ -3,7 +3,7 @@ require("dotenv").config();
 function api(db, requestIp, app, timestamp) {
   //GET /API/ALL
   app.get("/api/all", (req, res) => {
-    if(requestIp.getClientIp(req) != req.clientIp) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/all! | ${timestamp}`, "\x1b[0m", "");
+    if(requestIp.getClientIp(req) != req.clientIp && process.env.IPLOGGING === true) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/all! | ${timestamp}`, "\x1b[0m", "");
     if(req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
       const rows = db.prepare("SELECT * FROM items;").all();
@@ -13,7 +13,7 @@ function api(db, requestIp, app, timestamp) {
 
   //GET /API/PRICES
   app.get("/api/prices", (req, res) => {
-    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/prices! | ${timestamp}`, "\x1b[0m", "");
+    if(process.env.IPLOGGING === true) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/prices! | ${timestamp}`, "\x1b[0m", "");
     if(req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
       const rows = db.prepare("SELECT name, price, tier FROM items;").all();
@@ -30,7 +30,7 @@ function api(db, requestIp, app, timestamp) {
 
   //GET /API/SNUMBERS
   app.get("/api/snumbers", (req, res) => {
-    console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
+    if(process.env.IPLOGGING === true) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
     if(req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
 
       const rows = db.prepare("SELECT name, snr FROM items;").all();
@@ -47,7 +47,7 @@ function api(db, requestIp, app, timestamp) {
 
   //POST /API/SNUMBERS
   app.post("/api/snumbers", (req, res) => {
-    console.log("\x1b[35m", `> (POST) ${req.clientIp} visited /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
+    if(process.env.IPLOGGING === true) console.log("\x1b[35m", `> (POST) ${req.clientIp} visited /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
     if(req.body && req.body.key && process.env.KEYS && process.env.KEYS.includes(req.body.key)) {
       if(req.body.key && req.body.name) {
 
@@ -58,7 +58,7 @@ function api(db, requestIp, app, timestamp) {
         if(row) {
           //RECORD ALREADY EXISTS -> UPDATING
           ++row.snr;
-          console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated { "name": "${capitalized}", "snr": ${row.snr} } using /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
+          if(process.env.IPLOGGING === true) console.log("\x1b[33m", `> ✅ (POST) ${req.clientIp} updated { "name": "${capitalized}", "snr": ${row.snr} } using /api/snumbers! | ${timestamp}`, "\x1b[0m", "");
           db.exec(`
             UPDATE items 
             SET snr = ${row.snr}

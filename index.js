@@ -9,14 +9,14 @@ function index(app, timestamp) {
         {
           GET: [
             {
-              url: `https://${req.hostname}/api/prices?key=YOUR_ACCESS_KEY`,
+              url: `//${req.hostname}/api/prices?key=YOUR_ACCESS_KEY`,
               accepts: "none/read-only",
               method: "GET",
               returns: "{ \"Name\": [Price, \"Tier\"] }",
               returnType: "json"
             },
             {
-              url: `https://${req.hostname}/api/snumbers?key=YOUR_ACCESS_KEY`,
+              url: `//${req.hostname}/api/snumbers?key=YOUR_ACCESS_KEY`,
               accepts: "none/read-only",
               method: "GET",
               returns: "{ \"Name\": Snr }",
@@ -27,7 +27,7 @@ function index(app, timestamp) {
         {
           POST: [
             {
-              url: `https://${req.hostname}/api/snumbers`,
+              url: `//${req.hostname}/api/snumbers`,
               accepts: "{ \"key\": \"YOUR_ACCESS_KEY (String)\", \"name\": \"Name (String)\" }",
               method: "POST",
               returns: "{ \"success\": true/false (Bool), \"error\": Error reason (String) }",

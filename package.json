@@ -1,7 +1,7 @@
 {
   "name": "nxengameapi",
   "version": "1.1.0",
-  "description": "A backend api for Nxen's game, with dashboard gui",
+  "description": "A backend api for Nxen's game, with dashboard GUI connected to a SQLite Database!",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

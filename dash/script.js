@@ -93,7 +93,9 @@ function preload() {
 preload();
 
 /////////////////////////////////
+
 /*
+//REST API IMPLEMENTATION
 function fetchAll() {
   let json = "";
 
@@ -142,6 +144,7 @@ setInterval(() => {
 fetchAll();
 */
 
+//WEBSOCKETS IMPLEMENTATION
 function wsConnect() {
   window.WebSocket = window.WebSocket || window.MozWebSocket;
   const ws = new WebSocket(`ws://${window.location.origin.replace("http://", "").replace("https://", "")}:8080?key=${search.split("&success=")[0].replace("?key=", "")}`);

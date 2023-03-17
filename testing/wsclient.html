@@ -1,0 +1,25 @@
+<script>
+  function wsConnect() {
+    window.WebSocket = window.WebSocket || window.MozWebSocket;
+    const ws = new WebSocket('ws://localhost:8080?key=test');
+
+    ws.onerror = err => {
+      ws.close();
+      return window.location.href = `${window.location.href.split("&succes=")[0]}&success=error`;
+    }
+    ws.onopen = () => {
+      console.log("wsconn open");
+      ws.send("getall");
+
+      ws.onmessage = (data) => {
+        console.log(data.data.toString());
+      }
+
+      ws.onclose = e => {
+        console.log("wsconn closed, attempting to reconnect");
+        setTimeout(() => wsConnect(), 1000);
+      }
+    }
+  }
+  wsConnect();
+</script>

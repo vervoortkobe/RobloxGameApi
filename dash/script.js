@@ -60,6 +60,15 @@ if(search.includes("&success=")) {
         slOut();
         break;
       }
+    case search.includes("&success=error"):
+      {
+        success.classList.add("slideIn");
+        successdiv.setAttribute("class", "alert alert-dismissible alert-danger");
+        successtitle.innerHTML = `❌ WS Connection Error`;
+        successdesc.innerHTML = `WebSocket Connection Error: I couldn't reach the DB!`;
+        slOut();
+        break;
+      }
     default:
       //none
       break;
@@ -72,19 +81,19 @@ function slOut() {
     setTimeout(() => {
     success.classList.remove("slideIn");
     success.classList.add("slideOut");
-  }, 3000);
+  }, 5000);
 }
 
 function preload() {
   setTimeout(() => {
     document.getElementById("preload").style.display = "none";
     document.getElementById("pagecontent").style.display = "block";
-  }, 200);
+  }, 300);
 }
 preload();
 
 /////////////////////////////////
-
+/*
 function fetchAll() {
   let json = "";
 
@@ -131,6 +140,50 @@ setInterval(() => {
 }, 5000);
 
 fetchAll();
+*/
+
+function wsConnect() {
+  window.WebSocket = window.WebSocket || window.MozWebSocket;
+  const ws = new WebSocket(`ws://${window.location.origin.replace("http://", "").replace("https://", "")}:8080?key=${search.split("&success=")[0].replace("?key=", "")}`);
+
+  ws.onerror = err => {
+    ws.close();
+    return window.location.href = `${window.location.href.replace("&success=add", "").replace("&success=update", "").replace("&success=remove", "").replace("&success=reset", "").replace("&success=fail", "").replace("&success=error", "")}&success=error`;
+  }
+  ws.onopen = () => {
+    console.log("wsconn open");
+    ws.send("getall");
+
+    let json = "";
+    ws.onmessage = (msg) => { //where the magic happens
+      const data = JSON.parse(msg.data.toString());
+
+      json += "[<br>";
+      data.forEach(r => {
+        //console.log(r);
+        json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
+          <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>,
+          <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>,
+          <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.price}</b>,
+          <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>,
+          <span>\"snr\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.snr}</b> },<br>`;
+      });
+      json += "]";
+      json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
+  
+      if(data.length === 0) json = "No database table (items) records yet...";
+  
+      jsondiv.innerHTML = json;
+
+    }
+
+    ws.onclose = e => {
+      console.log("wsconn closed, attempting to reconnect");
+      setTimeout(() => wsConnect(), 1000);
+    }
+  }
+}
+wsConnect();
 
 /////////////////////////////////
 

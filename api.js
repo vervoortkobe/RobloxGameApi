@@ -1,16 +1,6 @@
 require("dotenv").config();
 
 function api(db, requestIp, app, timestamp) {
-  //GET /API/ALL
-  app.get("/api/all", (req, res) => {
-    if(requestIp.getClientIp(req) != req.clientIp && process.env.IPLOGGING === true) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/all! | ${timestamp}`, "\x1b[0m", "");
-    if(req.query && req.query.key && typeof (req.query.key) == "string" && process.env.KEYS && process.env.KEYS.includes(req.query.key)) {
-
-      const rows = db.prepare("SELECT * FROM items;").all();
-      return res.json(rows);
-    } else return res.json({ error: "Your KEY was declined!" });
-  });
-
   //GET /API/PRICES
   app.get("/api/prices", (req, res) => {
     if(process.env.IPLOGGING === true) console.log("\x1b[35m", `> (GET) ${req.clientIp} visited /api/prices! | ${timestamp}`, "\x1b[0m", "");

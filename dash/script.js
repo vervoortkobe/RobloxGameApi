@@ -157,10 +157,10 @@ function wsConnect() {
     console.log("wsconn open");
     ws.send("getall");
 
-    let json = "";
     ws.onmessage = (msg) => { //where the magic happens
       const data = JSON.parse(msg.data.toString());
 
+      let json = "";
       json += "[<br>";
       data.forEach(r => {
         //console.log(r);
@@ -175,9 +175,8 @@ function wsConnect() {
       json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
   
       if(data.length === 0) json = "No database table (items) records yet...";
-  
+      
       jsondiv.innerHTML = json;
-
     }
 
     ws.onclose = e => {

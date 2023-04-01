@@ -17,7 +17,7 @@ async function pricefluct(db) {
         const percentage = Math.floor(Math.random() * 71) / 100;
         if(chance2 === 1) { //INCREASING
           const newprice = r.price + (r.price * percentage);
-          const finalprice = checkBoundaries(newprice, r.tier);
+          const finalprice = Math.floor(checkBoundaries(newprice, r.tier));
 
           db.exec(`
             UPDATE items 
@@ -27,7 +27,7 @@ async function pricefluct(db) {
 
         } else { //DECREASING
           const newprice = r.price - (r.price * percentage);
-          const finalprice = checkBoundaries(newprice, r.tier);
+          const finalprice = Math.floor(checkBoundaries(newprice, r.tier));
 
           db.exec(`
             UPDATE items 

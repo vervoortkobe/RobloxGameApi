@@ -162,6 +162,7 @@ function wsConnect() {
 
       let json = "";
       json += "[<br>";
+      /*
       data.forEach(r => {
         //console.log(r);
         json += `&nbsp;&nbsp;&nbsp;&nbsp;{ 
@@ -170,7 +171,18 @@ function wsConnect() {
           <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.price}</b>,
           <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>,
           <span>\"snr\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.snr}</b> },<br>`;
-      });
+      });*/
+
+      json += data.map(r => {
+        //console.log(r);
+        return `&nbsp;&nbsp;&nbsp;&nbsp;{ 
+          <span>\"id\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.id}\"</b>,
+          <span>\"name\"</span>: <b style="color: #ce9178; border-radius: 4px; padding: 2px;">\"${r.name}\"</b>,
+          <span>\"price\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.price}</b>,
+          <span>\"tier\"</span>: <b style="color: #94cea8; border-radius: 4px; padding: 2px;">\"${r.tier}\"</b>,
+          <span>\"snr\"</span>: <b style="color: #9cdcf1; border-radius: 4px; padding: 2px;">${r.snr}</b> },<br>`;
+        });
+
       json += "]";
       json = json.substring(0, json.lastIndexOf(",")) + json.substring(json.lastIndexOf(",") + 1, json.length);
   

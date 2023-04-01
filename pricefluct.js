@@ -3,8 +3,8 @@ require("dotenv").config();
 async function pricefluct(db) {
   const tierlimits = require("./tierlimits.json"); //PRICE BOUNDARIES
   function checkBoundaries(newprice, tier) {
-    if(newprice < tierlimits[tier]) return tierlimits[tier][0];
-    else if(newprice > tierlimits[tier]) return tierlimits[tier][1];
+    if(newprice < tierlimits[tier][0]) return tierlimits[tier][0];
+    else if(newprice > tierlimits[tier][1]) return tierlimits[tier][1];
     return newprice;
   }
   const rows = db.prepare("SELECT * FROM items;").all();
